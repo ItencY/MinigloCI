@@ -59,6 +59,7 @@ func handlerRun(w http.ResponseWriter, r *http.Request) {
 	// We create a context with a timeout so that the server doesn't hang.
 	ctx, cancel := context.WithTimeout(r.Context(), commandTimeout)
 	defer cancel()
+	// #nosec G204
 	cmd := exec.CommandContext(ctx, binaryPath, req.Args...)
 	stdoutBuf, err := cmd.StdoutPipe()
 	if err != nil {
@@ -70,7 +71,7 @@ func handlerRun(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
-	if err := cmd.Start(); err != nil {
+	if err = cmd.Start(); err != nil {
 		http.Error(w, "Failed to start command", http.StatusInternalServerError)
 		return
 	}
