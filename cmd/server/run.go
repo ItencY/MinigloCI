@@ -45,10 +45,13 @@ func (ah *AppHandler) handlerRun(w http.ResponseWriter, r *http.Request) {
 		switch {
 		case errors.Is(err, runner.ErrUnauthorizedCommand):
 			http.Error(w, "Unauthorized command", http.StatusForbidden)
+			return
 		case errors.Is(err, runner.ErrCommandTimeout):
 			http.Error(w, "command timed out", http.StatusGatewayTimeout)
+			return
 		default:
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			return
 		}
 	}
 	w.Header().Set("Content-Type", "application/json")
