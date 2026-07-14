@@ -5,12 +5,16 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/ItencY/internal/runner"
 )
 
 func main() {
 	const port = "8080"
+	runner := runner.NewLocalRunner()
+	ah := NewAppHandler(runner)
 	mux := http.NewServeMux()
-	mux.HandleFunc("POST /run", handlerRun)
+	mux.HandleFunc("POST /run", ah.handlerRun)
 	server := &http.Server{
 		Handler:           mux,
 		Addr:              ":" + port,
