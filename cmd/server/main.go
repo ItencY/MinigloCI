@@ -11,7 +11,7 @@ import (
 
 func main() {
 	const port = "8080"
-	runner := runner.NewLocalRunner()
+	runner := runner.NewDockerRunner("alpine:latest")
 	ah := NewAppHandler(runner)
 	mux := http.NewServeMux()
 	mux.HandleFunc("POST /run", ah.handlerRun)

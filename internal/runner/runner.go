@@ -1,18 +1,38 @@
 package runner
 
-import "context"
+import (
+	"context"
+	"errors"
+	"time"
+)
 
-type RunRequest struct {
+var (
+	ErrUnauthorizedCommand = errors.New("unauthorized command")
+	ErrCommandTimeout      = errors.New("command timed out")
+	ErrExecutionFailed     = errors.New("command execution failed")
+)
+
+const (
+	maxOutputSize  = 1024 * 1024     // 1 MB for memory protection
+	commandTimeout = 5 * time.Second // Command execution timeout
+)
+
+// Allowlist of permitted utilities (RCE protection)
+var allowedBinaries = map[string]string{
+	"echo": "/usr/bin/echo",
+}
+
+type CommandRequest struct {
 	Command string   `json:"command"`
 	Args    []string `json:"args"`
 }
 
-type RunResponse struct {
+type CommandResult struct {
 	Stdout   string `json:"stdout"`
 	Stderr   string `json:"stderr"`
 	ExitCode int    `json:"exit_code"`
 }
 
 type Runner interface {
-	Run(ctx context.Context, req RunRequest) (*RunResponse, error)
+	Run(ctx context.Context, req CommandRequest) (*CommandResult, error)
 }

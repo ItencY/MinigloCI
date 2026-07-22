@@ -29,7 +29,7 @@ func (ah *AppHandler) handlerRun(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 	limitedBody := io.LimitReader(r.Body, maxRequestSize)
-	var req runner.RunRequest
+	var req runner.CommandRequest
 	decoder := json.NewDecoder(limitedBody)
 	err := decoder.Decode(&req)
 	if err != nil {
