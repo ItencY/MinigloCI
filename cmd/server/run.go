@@ -29,17 +29,22 @@ func (ah *AppHandler) handlerRun(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 	limitedBody := io.LimitReader(r.Body, maxRequestSize)
+
 	var req runner.CommandRequest
+
 	decoder := json.NewDecoder(limitedBody)
+
 	err := decoder.Decode(&req)
 	if err != nil {
 		http.Error(w, "Invalid JSON structure", http.StatusBadRequest)
 		return
 	}
+
 	if len(req.Args) == 0 {
 		http.Error(w, "Arguments list cannot be empty", http.StatusBadRequest)
 		return
 	}
+
 	resp, err := ah.runner.Run(r.Context(), req)
 	if err != nil {
 		switch {
@@ -54,8 +59,10 @@ func (ah *AppHandler) handlerRun(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
+
 	if err := json.NewEncoder(w).Encode(resp); err != nil {
 		log.Printf("Failed to encode response JSON: %v", err)
 	}

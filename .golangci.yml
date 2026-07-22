@@ -12,6 +12,7 @@ linters:
     - staticcheck
     - unused
     - ineffassign
+    - wsl
   settings:
     errcheck:
       exclude-functions:

@@ -11,6 +11,7 @@ import (
 
 func main() {
 	const port = "8080"
+
 	runner := runner.NewDockerRunner("alpine:latest")
 	ah := NewAppHandler(runner)
 	mux := http.NewServeMux()
@@ -20,6 +21,7 @@ func main() {
 		Addr:              ":" + port,
 		ReadHeaderTimeout: 3 * time.Second,
 	}
+
 	log.Println("The server is running on port :8080.")
 	log.Fatal(server.ListenAndServe())
 }

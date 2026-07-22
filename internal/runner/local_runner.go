@@ -15,5 +15,6 @@ func (lr *LocalRunner) Run(ctx context.Context, req CommandRequest) (*CommandRes
 	if !exists {
 		return nil, ErrUnauthorizedCommand
 	}
+
 	return executeCmd(ctx, binaryPath, req.Args...)
 }
